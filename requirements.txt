@@ -1,0 +1,11 @@
+# ================================
+# MES 1 — Exploración y EDA
+# ================================
+pandas
+numpy
+matplotlib
+seaborn
+jupyter
+wordcloud
+nltk
+scikit-learn
