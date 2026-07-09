@@ -9,3 +9,8 @@ jupyter
 wordcloud
 nltk
 scikit-learn
+
+# ================================
+# MES 2 — Preprocesamiento NLP
+# ================================
+spacy

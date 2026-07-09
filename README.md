@@ -10,8 +10,8 @@ Quito, Ecuador · 2026
 
 | | |
 |---|---|
-| **Autor** | [Steeven Quezada] |
-| **Tutor** | [Alejandro Proaño] |
+| **Autor** | Steeven Quezada |
+| **Tutor** | Alejandro Proaño |
 | **Programa** | Maestría en Ciencia de Datos |
 | **Estado** | En desarrollo |
 | **Período** | 2026 |
@@ -113,6 +113,6 @@ pip install -r requirements.txt
 
 ## Contacto
 
-**[Steeven Quezada]**  
-[bquezadah@estud.usfq.edu.ec]  
+**Steeven Quezada**  
+bquezadah@estud.usfq.edu.ec  
 Maestría en Ciencia de Datos · USFQ · Quito, Ecuador
