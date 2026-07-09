@@ -22,7 +22,7 @@ Quito, Ecuador · 2026
 
 Este proyecto desarrolla un sistema integral para la detección automática de noticias falsas aplicando técnicas de Procesamiento de Lenguaje Natural (NLP), aprendizaje automático y Explainable AI (XAI). El sistema clasifica contenido como verdadero o falso, analiza los patrones lingüísticos que caracterizan la desinformación, y explica las decisiones de clasificación mediante métodos interpretables (SHAP, LIME).
 
-Como contribución original, se construye el primer corpus ecuatoriano de desinformación etiquetada, recopilado de las plataformas de fact-checking Ecuador Chequea y Lupa Media, ambas certificadas por la International Fact-Checking Network (IFCN).
+El sistema es evaluado sobre datasets internacionales de referencia (Fake & Real News, LIAR, FakeNewsNet) y validado sobre contenido en español. Como contribución original, se construye el primer corpus ecuatoriano de desinformación etiquetada, recopilado de las plataformas de fact-checking Ecuador Chequea y Lupa Media, ambas certificadas por la International Fact-Checking Network (IFCN).
 
 ---
 
@@ -49,11 +49,28 @@ fake-news-detection-ecuador/
 │   ├── processed/        # Datos limpios para modelado
 │   └── external/         # Corpus ecuatoriano construido
 │
-├── notebooks/            # Jupyter Notebooks por fase
-├── src/                  # Módulos Python reutilizables
-├── models/               # Modelos entrenados serializados
-├── reports/              # Figuras y visualizaciones para la tesis
-├── dashboard/            # Aplicación Streamlit
+├── notebooks/
+│   ├── 01_exploracion_inicial.ipynb   # EDA completo
+│   └── 02_preprocesamiento.ipynb      # Pipeline NLP
+│
+├── references/
+│   └── references.bib                 # Referencias bibliográficas APA
+│
+├── reports/                           # Visualizaciones del EDA
+│   ├── 01_distribucion_basica.png
+│   ├── 02_wordcloud.png
+│   ├── 03_sentimiento.png
+│   ├── 04_eda_completo.png
+│   └── 05_features_linguisticas.png
+│
+├── src/
+│   └── preprocessing.py              # Pipeline de preprocesamiento NLP
+│
+├── thesis/                           # Documento de tesis (local, no en GitHub)
+├── models/                           # Modelos entrenados (pendiente)
+├── dashboard/                        # Aplicación Streamlit (pendiente)
+├── .gitignore
+├── README.md
 └── requirements.txt
 ```
 
@@ -61,21 +78,21 @@ fake-news-detection-ecuador/
 
 ## Datasets utilizados
 
-| Capa | Dataset | Tamaño | Fuente |
-|---|---|---|---|
-| Base (inglés) | Fake & Real News | ~45,000 artículos | Kaggle |
-| Base (inglés) | LIAR / LIARx | 12,836 declaraciones | Zenodo |
-| Base (inglés) | FakeNewsNet | Variable | GitHub |
-| Base (inglés) | COVID-19 Fake News | ~10,700 noticias | Kaggle |
-| Español | Spanish Fake News Dataset | — | Univ. Complutense de Madrid (2025) |
-| Ecuador 🇪🇨 | Corpus Ecuador Chequea | 1,500+ verificaciones | Web scraping |
-| Ecuador 🇪🇨 | Corpus Lupa Media | 247+ casos | Web scraping |
+| Capa | Dataset | Tamaño | Fuente | Estado |
+|---|---|---|---|---|
+| Base (inglés) | Fake & Real News | ~45,000 artículos | Kaggle | ✅ Implementado |
+| Base (inglés) | LIAR / LIARx | 12,836 declaraciones | Zenodo | ⏳ Pendiente |
+| Base (inglés) | FakeNewsNet | Variable | GitHub | ⏳ Pendiente |
+| Base (inglés) | COVID-19 Fake News | ~10,700 noticias | Kaggle | ⏳ Pendiente |
+| Español | Spanish Fake News Dataset | — | Univ. Complutense de Madrid (2025) | ⏳ Pendiente |
+| Ecuador 🇪🇨 | Corpus Ecuador Chequea | 1,500+ verificaciones | Web scraping | ⏳ Pendiente |
+| Ecuador 🇪🇨 | Corpus Lupa Media | 247+ casos | Web scraping | ⏳ Pendiente |
 
 ---
 
 ## Stack tecnológico
 
-- **Lenguaje:** Python 3.10+
+- **Lenguaje:** Python 3.14
 - **NLP y ML:** scikit-learn, NLTK, spaCy, HuggingFace Transformers
 - **Deep Learning:** TensorFlow/Keras, PyTorch
 - **Explicabilidad:** SHAP, LIME
@@ -88,11 +105,12 @@ fake-news-detection-ecuador/
 ## Cómo reproducir el entorno
 
 ```bash
-git clone https://github.com/TU_USUARIO/fake-news-detection-ecuador.git
+git clone https://github.com/Ste3veN3/fake-news-detection-ecuador
 cd fake-news-detection-ecuador
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
+python -m spacy download en_core_web_sm
 ```
 
 ---
@@ -102,7 +120,9 @@ pip install -r requirements.txt
 - [x] Propuesta aprobada
 - [x] Repositorio inicializado
 - [x] Entorno configurado
-- [ ] EDA completado
+- [x] EDA completado
+- [x] Preprocesamiento NLP completado
+- [x] Marco Teórico redactado
 - [ ] Modelos baseline
 - [ ] BERT fine-tuning
 - [ ] XAI implementado

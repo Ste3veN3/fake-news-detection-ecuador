@@ -2,6 +2,7 @@
 # src/preprocessing.py
 # Pipeline de preprocesamiento NLP
 # Proyecto: Detección de Noticias Falsas - USFQ
+# Autor: Steeven Quezada
 # ================================================
 
 import re
