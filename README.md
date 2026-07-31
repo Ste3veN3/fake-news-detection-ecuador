@@ -65,7 +65,8 @@ fake-news-detection-ecuador/
 │   ├── 04_eda_completo.png
 │   ├── 05_features_linguisticas.png
 │   ├── 06_baseline_comparacion.png
-│   └── 07_confusion_matrix_baseline.png
+│   ├── 07_confusion_matrix_baseline.png
+│   └── 08_bert_historial.png
 │
 ├── src/
 │   ├── preprocessing.py              # Pipeline de preprocesamiento NLP
