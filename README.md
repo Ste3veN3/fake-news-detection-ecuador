@@ -51,28 +51,49 @@ fake-news-detection-ecuador/
 │
 ├── notebooks/
 │   ├── 01_exploracion_inicial.ipynb   # EDA completo
-│   └── 02_preprocesamiento.ipynb      # Pipeline NLP
+│   ├── 02_preprocesamiento.ipynb      # Pipeline NLP - 3 enfoques
+│   ├── 03_modelos_baseline.ipynb      # SVM 99.45% | LR | NB | RF
+│   └── 04_bert_finetuning.ipynb       # BERT base GPU T4 - 99.91%
 │
 ├── references/
 │   └── references.bib                 # Referencias bibliográficas APA
 │
-├── reports/                           # Visualizaciones del EDA
+├── reports/                           # Visualizaciones del EDA y modelos
 │   ├── 01_distribucion_basica.png
 │   ├── 02_wordcloud.png
 │   ├── 03_sentimiento.png
 │   ├── 04_eda_completo.png
-│   └── 05_features_linguisticas.png
+│   ├── 05_features_linguisticas.png
+│   ├── 06_baseline_comparacion.png
+│   └── 07_confusion_matrix_baseline.png
 │
 ├── src/
-│   └── preprocessing.py              # Pipeline de preprocesamiento NLP
+│   ├── preprocessing.py              # Pipeline de preprocesamiento NLP
+│   └── feature_extraction.py         # Vectorización TF-IDF
+│
+├── models/                           # Modelos entrenados (local, no en GitHub)
+│   ├── baseline_svm_best.pkl         # SVM - mejor baseline
+│   ├── tfidf_*.pkl                   # Vectorizadores TF-IDF
+│   └── bert_finetuned/               # BERT fine-tuned (427MB)
 │
 ├── thesis/                           # Documento de tesis (local, no en GitHub)
-├── models/                           # Modelos entrenados (pendiente)
 ├── dashboard/                        # Aplicación Streamlit (pendiente)
 ├── .gitignore
 ├── README.md
 └── requirements.txt
 ```
+
+---
+
+## Resultados obtenidos
+
+| Modelo | Enfoque | Accuracy | F1-score |
+|---|---|---|---|
+| Naive Bayes | Título+Texto | 94.71% | 0.9471 |
+| Logistic Regression | Título+Texto | 98.69% | 0.9869 |
+| Random Forest | Título+Texto | 99.21% | 0.9921 |
+| SVM | Título+Texto | 99.45% | 0.9945 |
+| **BERT base** | **Título+Texto** | **99.91%** | **0.9991** |
 
 ---
 
@@ -94,11 +115,11 @@ fake-news-detection-ecuador/
 
 - **Lenguaje:** Python 3.14
 - **NLP y ML:** scikit-learn, NLTK, spaCy, HuggingFace Transformers
-- **Deep Learning:** TensorFlow/Keras, PyTorch
+- **Deep Learning:** PyTorch, BERT base uncased
 - **Explicabilidad:** SHAP, LIME
 - **Análisis de redes:** NetworkX
 - **Visualización:** matplotlib, seaborn, Streamlit
-- **Cómputo GPU:** Google Colab / Kaggle Notebooks
+- **Cómputo GPU:** Google Colab T4
 
 ---
 
@@ -121,11 +142,12 @@ python -m spacy download en_core_web_sm
 - [x] Repositorio inicializado
 - [x] Entorno configurado
 - [x] EDA completado
-- [x] Preprocesamiento NLP completado
-- [x] Marco Teórico redactado
-- [ ] Modelos baseline
-- [ ] BERT fine-tuning
-- [ ] XAI implementado
+- [x] Preprocesamiento NLP completado (3 enfoques)
+- [x] Marco Teórico redactado (7 papers, 14 referencias)
+- [x] Modelos baseline completados (mejor: SVM 99.45%)
+- [x] BERT fine-tuning completado (99.91% accuracy, F1 0.9991)
+- [ ] XAI implementado (SHAP + LIME)
+- [ ] Corpus ecuatoriano construido
 - [ ] Dashboard deployed
 - [ ] Tesis entregada
 

@@ -16,3 +16,10 @@ scikit-learn
 spacy
 # NOTA: después de instalar ejecutar:
 # python -m spacy download en_core_web_sm
+
+# ================================
+# MES 3 — Deep Learning / BERT
+# ================================
+transformers
+torch
+datasets
