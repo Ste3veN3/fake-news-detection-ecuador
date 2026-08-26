@@ -22,7 +22,7 @@ Quito, Ecuador · 2026
 
 Este proyecto desarrolla un sistema integral para la detección automática de noticias falsas aplicando técnicas de Procesamiento de Lenguaje Natural (NLP), aprendizaje automático y Explainable AI (XAI). El sistema clasifica contenido como verdadero o falso, analiza los patrones lingüísticos que caracterizan la desinformación, y explica las decisiones de clasificación mediante métodos interpretables (SHAP, LIME).
 
-El sistema es evaluado sobre datasets internacionales de referencia (Fake & Real News, LIAR, FakeNewsNet) y validado sobre contenido en español. Como contribución original, se construye el primer corpus ecuatoriano de desinformación etiquetada, recopilado de las plataformas de fact-checking Ecuador Chequea y Lupa Media, ambas certificadas por la International Fact-Checking Network (IFCN).
+El sistema es evaluado sobre el dataset Fake & Real News (Kaggle) y validado mediante una prueba de generalización con AG News (Reuters/AP). Como contribución original, se construye el primer corpus ecuatoriano de desinformación etiquetada, recopilado de las plataformas de fact-checking Ecuador Chequea y Lupa Media, ambas certificadas por la International Fact-Checking Network (IFCN).
 
 ---
 
@@ -31,8 +31,8 @@ El sistema es evaluado sobre datasets internacionales de referencia (Fake & Real
 **General:** Desarrollar un sistema integral de detección automática de noticias falsas que integre modelos Transformer, análisis de patrones lingüísticos y técnicas de explicabilidad en IA, evaluado sobre múltiples datasets públicos de referencia y validado sobre contenido ecuatoriano.
 
 **Específicos:**
-1. Diseñar y ejecutar un pipeline completo de preprocesamiento y análisis exploratorio de cuatro datasets de noticias etiquetadas.
-2. Implementar y comparar modelos de clasificación desde enfoques clásicos (TF-IDF + ML) hasta arquitecturas avanzadas (LSTM, BERT/RoBERTa).
+1. Diseñar y ejecutar un pipeline completo de preprocesamiento y análisis exploratorio de noticias etiquetadas.
+2. Implementar y comparar modelos de clasificación desde enfoques clásicos (TF-IDF + ML) hasta arquitecturas avanzadas (BERT).
 3. Aplicar técnicas de Explainable AI (SHAP, LIME) para identificar patrones lingüísticos asociados a la desinformación.
 4. Construir un corpus original de verificaciones ecuatorianas mediante web scraping de fuentes certificadas.
 5. Desarrollar un dashboard interactivo que permita clasificar noticias en tiempo real con explicaciones visuales.
@@ -53,7 +53,8 @@ fake-news-detection-ecuador/
 │   ├── 01_exploracion_inicial.ipynb   # EDA completo
 │   ├── 02_preprocesamiento.ipynb      # Pipeline NLP - 3 enfoques
 │   ├── 03_modelos_baseline.ipynb      # SVM 99.45% | LR | NB | RF
-│   └── 04_bert_finetuning.ipynb       # BERT base GPU T4 - 99.91%
+│   ├── 04_bert_finetuning.ipynb       # BERT base GPU T4 - 99.91%
+│   └── 05_evaluacion_generalizacion.ipynb        # Generalización - 49% fuera del dominio
 │
 ├── references/
 │   └── references.bib                 # Referencias bibliográficas APA
@@ -95,6 +96,7 @@ fake-news-detection-ecuador/
 | Random Forest | Título+Texto | 99.21% | 0.9921 |
 | SVM | Título+Texto | 99.45% | 0.9945 |
 | **BERT base** | **Título+Texto** | **99.91%** | **0.9991** |
+| SVM (generalización externa) | AG News + LLM | 49% | — |
 
 ---
 
@@ -102,11 +104,8 @@ fake-news-detection-ecuador/
 
 | Capa | Dataset | Tamaño | Fuente | Estado |
 |---|---|---|---|---|
-| Base (inglés) | Fake & Real News | ~45,000 artículos | Kaggle | ✅ Implementado |
-| Base (inglés) | LIAR / LIARx | 12,836 declaraciones | Zenodo | ⏳ Pendiente |
-| Base (inglés) | FakeNewsNet | Variable | GitHub | ⏳ Pendiente |
-| Base (inglés) | COVID-19 Fake News | ~10,700 noticias | Kaggle | ⏳ Pendiente |
-| Español | Spanish Fake News Dataset | — | Univ. Complutense de Madrid (2025) | ⏳ Pendiente |
+| Entrenamiento | Fake & Real News | ~45,000 artículos | Kaggle | ✅ Implementado |
+| Generalización | AG News | 7,600 artículos | HuggingFace (Reuters/AP) | ✅ Implementado |
 | Ecuador 🇪🇨 | Corpus Ecuador Chequea | 1,500+ verificaciones | Web scraping | ⏳ Pendiente |
 | Ecuador 🇪🇨 | Corpus Lupa Media | 247+ casos | Web scraping | ⏳ Pendiente |
 
@@ -147,6 +146,7 @@ python -m spacy download en_core_web_sm
 - [x] Marco Teórico redactado (7 papers, 14 referencias)
 - [x] Modelos baseline completados (mejor: SVM 99.45%)
 - [x] BERT fine-tuning completado (99.91% accuracy, F1 0.9991)
+- [x] Prueba de generalización externa (49% - sesgo de dominio documentado)
 - [ ] XAI implementado (SHAP + LIME)
 - [ ] Corpus ecuatoriano construido
 - [ ] Dashboard deployed
