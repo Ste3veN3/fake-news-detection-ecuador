@@ -23,3 +23,9 @@ spacy
 transformers
 torch
 datasets
+
+# ================================
+# MES 4 — Explicabilidad XAI
+# ================================
+shap
+lime
