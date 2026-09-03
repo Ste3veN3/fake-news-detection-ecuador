@@ -22,7 +22,7 @@ Quito, Ecuador · 2026
 
 Este proyecto desarrolla un sistema integral para la detección automática de noticias falsas aplicando técnicas de Procesamiento de Lenguaje Natural (NLP), aprendizaje automático y Explainable AI (XAI). El sistema clasifica contenido como verdadero o falso, analiza los patrones lingüísticos que caracterizan la desinformación, y explica las decisiones de clasificación mediante métodos interpretables (SHAP, LIME).
 
-El sistema es evaluado sobre el dataset Fake & Real News (Kaggle) y validado mediante una prueba de generalización con AG News (Reuters/AP). Como contribución original, se construye el primer corpus ecuatoriano de desinformación etiquetada, recopilado de las plataformas de fact-checking Ecuador Chequea y Lupa Media, ambas certificadas por la International Fact-Checking Network (IFCN).
+El sistema es evaluado sobre el dataset Fake & Real News (Kaggle) y validado mediante una prueba de generalización con AG News (Reuters/AP). Como contribución original, se construye el primer corpus ecuatoriano de desinformación etiquetada con más de 1,500 verificaciones de Ecuador Chequea, organización certificada por la International Fact-Checking Network (IFCN), cubriendo el período 2016-2026.
 
 ---
 
@@ -50,16 +50,18 @@ fake-news-detection-ecuador/
 │   └── external/         # Corpus ecuatoriano construido
 │
 ├── notebooks/
-│   ├── 01_exploracion_inicial.ipynb   # EDA completo
-│   ├── 02_preprocesamiento.ipynb      # Pipeline NLP - 3 enfoques
-│   ├── 03_modelos_baseline.ipynb      # SVM 99.45% | LR | NB | RF
-│   ├── 04_bert_finetuning.ipynb       # BERT base GPU T4 - 99.91%
-│   └── 05_evaluacion_generalizacion.ipynb        # Generalización - 49% fuera del dominio
+│   ├── 01_exploracion_inicial.ipynb        # EDA completo
+│   ├── 02_preprocesamiento.ipynb           # Pipeline NLP - 3 enfoques
+│   ├── 03_modelos_baseline.ipynb           # SVM 99.45% | LR | NB | RF
+│   ├── 04_bert_finetuning.ipynb            # BERT base GPU T4 - 99.91%
+│   ├── 05_evaluacion_generalizacion.ipynb  # Generalización - 49% fuera del dominio
+│   ├── 06_xai_shap_lime.ipynb             # SHAP y LIME - explicabilidad
+│   └── 07_corpus_ecuatoriano.ipynb        # Corpus Ecuador Chequea - 1,543 verificaciones
 │
 ├── references/
-│   └── references.bib                 # Referencias bibliográficas APA
+│   └── references.bib                      # Referencias bibliográficas APA
 │
-├── reports/                           # Visualizaciones del EDA y modelos
+├── reports/                                # Visualizaciones del EDA y modelos
 │   ├── 01_distribucion_basica.png
 │   ├── 02_wordcloud.png
 │   ├── 03_sentimiento.png
@@ -67,11 +69,17 @@ fake-news-detection-ecuador/
 │   ├── 05_features_linguisticas.png
 │   ├── 06_baseline_comparacion.png
 │   ├── 07_confusion_matrix_baseline.png
-│   └── 08_bert_historial.png
+│   ├── 08_bert_historial.png
+│   ├── 09_prueba_externa.png
+│   ├── 10_lime_explicaciones.png
+│   ├── 11_shap_global.png
+│   ├── 12_shap_direccion.png
+│   └── 13_corpus_ecuatoriano.png
 │
 ├── src/
 │   ├── preprocessing.py              # Pipeline de preprocesamiento NLP
-│   └── feature_extraction.py         # Vectorización TF-IDF
+│   ├── feature_extraction.py         # Vectorización TF-IDF
+│   └── scraper_ecuador_chequea.py    # Web scraping Ecuador Chequea
 │
 ├── models/                           # Modelos entrenados (local, no en GitHub)
 │   ├── baseline_svm_best.pkl         # SVM - mejor baseline
@@ -106,8 +114,7 @@ fake-news-detection-ecuador/
 |---|---|---|---|---|
 | Entrenamiento | Fake & Real News | ~45,000 artículos | Kaggle | ✅ Implementado |
 | Generalización | AG News | 7,600 artículos | HuggingFace (Reuters/AP) | ✅ Implementado |
-| Ecuador 🇪🇨 | Corpus Ecuador Chequea | 1,500+ verificaciones | Web scraping | ⏳ Pendiente |
-| Ecuador 🇪🇨 | Corpus Lupa Media | 247+ casos | Web scraping | ⏳ Pendiente |
+| Ecuador 🇪🇨 | Corpus Ecuador Chequea | 1,500+ verificaciones | Web scraping | ✅ Implementado |
 
 ---
 
@@ -117,7 +124,7 @@ fake-news-detection-ecuador/
 - **NLP y ML:** scikit-learn, NLTK, spaCy, HuggingFace Transformers
 - **Deep Learning:** PyTorch, BERT base uncased
 - **Explicabilidad:** SHAP, LIME
-- **Análisis de redes:** NetworkX
+- **Web Scraping:** requests, BeautifulSoup
 - **Visualización:** matplotlib, seaborn, Streamlit
 - **Cómputo GPU:** Google Colab T4
 
@@ -147,8 +154,9 @@ python -m spacy download en_core_web_sm
 - [x] Modelos baseline completados (mejor: SVM 99.45%)
 - [x] BERT fine-tuning completado (99.91% accuracy, F1 0.9991)
 - [x] Prueba de generalización externa (49% - sesgo de dominio documentado)
-- [ ] XAI implementado (SHAP + LIME)
-- [ ] Corpus ecuatoriano construido
+- [x] XAI implementado (SHAP + LIME)
+- [x] Corpus ecuatoriano construido (1,543 verificaciones Ecuador Chequea)
+- [ ] Evaluación del modelo sobre corpus ecuatoriano
 - [ ] Dashboard deployed
 - [ ] Tesis entregada
 

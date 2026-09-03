@@ -25,7 +25,9 @@ torch
 datasets
 
 # ================================
-# MES 4 — Explicabilidad XAI
+# MES 4 — Explicabilidad XAI y Corpus ecuatoriano
 # ================================
 shap
 lime
+requests
+beautifulsoup4
