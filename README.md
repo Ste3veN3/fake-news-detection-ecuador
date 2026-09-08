@@ -164,6 +164,7 @@ python -m spacy download en_core_web_sm
 - [x] Corpus ecuatoriano construido (1,500+ verificaciones Ecuador Chequea)
 - [x] Evaluación BERT sin fine-tuning en español
 - [x] Fine-tuning BERT multilingüe corpus ecuatoriano (+18 puntos de mejora)
+- [x] Análisis lingüístico LDA completado (8 tópicos corpus ecuatoriano)
 - [ ] Dashboard deployed
 - [ ] Tesis entregada
 
