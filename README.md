@@ -52,11 +52,12 @@ fake-news-detection-ecuador/
 ├── notebooks/
 │   ├── 01_exploracion_inicial.ipynb        # EDA completo
 │   ├── 02_preprocesamiento.ipynb           # Pipeline NLP - 3 enfoques
-│   ├── 03_modelos_baseline.ipynb           # SVM 99.45% | LR | NB | RF
-│   ├── 04_bert_finetuning.ipynb            # BERT base GPU T4 - 99.91%
-│   ├── 05_evaluacion_generalizacion.ipynb  # Generalización - 49% fuera del dominio
+│   ├── 03_modelos_baseline.ipynb           # SVM | LR | NB | RF
+│   ├── 04_bert_finetuning.ipynb            # BERT base GPU T4 - inglés
+│   ├── 05_evaluacion_generalizacion.ipynb  # Generalización - fuera del dominio
 │   ├── 06_xai_shap_lime.ipynb             # SHAP y LIME - explicabilidad
-│   └── 07_corpus_ecuatoriano.ipynb        # Corpus Ecuador Chequea - 1,543 verificaciones
+│   ├── 07_corpus_ecuatoriano.ipynb        # Corpus Ecuador Chequea 1,500+ verificaciones
+│   └── 08_bert_finetuning_ecuador.ipynb   # BERT multilingüe corpus Ecuador
 │
 ├── references/
 │   └── references.bib                      # Referencias bibliográficas APA
@@ -74,7 +75,9 @@ fake-news-detection-ecuador/
 │   ├── 10_lime_explicaciones.png
 │   ├── 11_shap_global.png
 │   ├── 12_shap_direccion.png
-│   └── 13_corpus_ecuatoriano.png
+│   ├── 13_corpus_ecuatoriano.png
+│   ├── 14_bert_corpus_ecuatoriano.png
+│   └── 15_bert_ecuador_resultados.png
 │
 ├── src/
 │   ├── preprocessing.py              # Pipeline de preprocesamiento NLP
@@ -84,7 +87,8 @@ fake-news-detection-ecuador/
 ├── models/                           # Modelos entrenados (local, no en GitHub)
 │   ├── baseline_svm_best.pkl         # SVM - mejor baseline
 │   ├── tfidf_*.pkl                   # Vectorizadores TF-IDF
-│   └── bert_finetuned/               # BERT fine-tuned (427MB)
+│   ├── bert_finetuned/               # BERT fine-tuned inglés
+│   └── bert_ecuador/                 # BERT fine-tuned español Ecuador
 │
 ├── thesis/                           # Documento de tesis (local, no en GitHub)
 ├── dashboard/                        # Aplicación Streamlit (pendiente)
@@ -103,8 +107,10 @@ fake-news-detection-ecuador/
 | Logistic Regression | Título+Texto | 98.69% | 0.9869 |
 | Random Forest | Título+Texto | 99.21% | 0.9921 |
 | SVM | Título+Texto | 99.45% | 0.9945 |
-| **BERT base** | **Título+Texto** | **99.91%** | **0.9991** |
-| SVM (generalización externa) | AG News + LLM | 49% | — |
+| **BERT base (inglés)** | **Título+Texto** | **99.91%** | **0.9991** |
+| SVM (generalización externa) | AG News + LLM | 49.00% | — |
+| BERT sin fine-tuning (Ecuador) | Contenido español | 66.62% | 0.7041 |
+| **BERT multilingüe (Ecuador)** | **Contenido español** | **84.91%** | **0.8305** |
 
 ---
 
@@ -122,7 +128,7 @@ fake-news-detection-ecuador/
 
 - **Lenguaje:** Python 3.14
 - **NLP y ML:** scikit-learn, NLTK, spaCy, HuggingFace Transformers
-- **Deep Learning:** PyTorch, BERT base uncased
+- **Deep Learning:** PyTorch, BERT base uncased, BERT multilingüe
 - **Explicabilidad:** SHAP, LIME
 - **Web Scraping:** requests, BeautifulSoup
 - **Visualización:** matplotlib, seaborn, Streamlit
@@ -151,12 +157,13 @@ python -m spacy download en_core_web_sm
 - [x] EDA completado
 - [x] Preprocesamiento NLP completado (3 enfoques)
 - [x] Marco Teórico redactado (7 papers, 14 referencias)
-- [x] Modelos baseline completados (mejor: SVM 99.45%)
-- [x] BERT fine-tuning completado (99.91% accuracy, F1 0.9991)
-- [x] Prueba de generalización externa (49% - sesgo de dominio documentado)
+- [x] Modelos baseline completados (mejor: SVM)
+- [x] BERT fine-tuning completado en inglés
+- [x] Prueba de generalización externa (sesgo de dominio documentado)
 - [x] XAI implementado (SHAP + LIME)
-- [x] Corpus ecuatoriano construido (1,543 verificaciones Ecuador Chequea)
-- [ ] Evaluación del modelo sobre corpus ecuatoriano
+- [x] Corpus ecuatoriano construido (1,500+ verificaciones Ecuador Chequea)
+- [x] Evaluación BERT sin fine-tuning en español
+- [x] Fine-tuning BERT multilingüe corpus ecuatoriano (+18 puntos de mejora)
 - [ ] Dashboard deployed
 - [ ] Tesis entregada
 
