@@ -97,7 +97,11 @@ fake-news-detection-ecuador/
 │
 ├── thesis/                           # Documento de tesis (local, no en GitHub)
 ├── dashboard/                        # Aplicación Streamlit (v1 funcional en local)
-│   └── app.py
+│   ├── app.py                        # Páginas, carga de modelos y lógica
+│   ├── ui.py                         # Estilos y componentes visuales
+│   └── assets/                       # Logo de la universidad (usfq_logo.png o .svg)
+├── .streamlit/
+│   └── config.toml                   # Tema del dashboard
 ├── .gitignore
 ├── README.md
 └── requirements.txt
@@ -167,7 +171,14 @@ Desde la raíz del repositorio, con el entorno virtual activado:
 python -m streamlit run dashboard/app.py
 ```
 
-El dashboard incluye cuatro secciones: clasificador de noticias con detección automática de idioma (BERT inglés o BERT multilingüe Ecuador), explicabilidad con SHAP y LIME, clasificación de tópicos LDA y estadísticas de los corpus.
+El dashboard tiene cuatro secciones, en la barra lateral:
+
+- **Verificar:** detecta el idioma del texto y lo clasifica con el BERT correspondiente (BERT base en inglés: Falsa o Real; BERT multilingüe Ecuador en español: Desinformación o Verificado). Muestra las dos probabilidades y marca como poco concluyentes los resultados por debajo de 65%. En español muestra además los tres temas LDA más cercanos al texto; en inglés ofrece llevar el texto a la sección Explicar.
+- **Explicar:** resalta las palabras que empujaron la decisión del SVM con TF-IDF mediante LIME (precisión Rápida de 1,500 variantes o Completa de 5,000, con semilla fija 42) y muestra la importancia global de SHAP. Incluye un par de ejemplos, con y sin la fuente, para mostrar el sesgo hacia "Reuters". Funciona con texto en inglés.
+- **Temas:** los ocho temas del modelo LDA sobre el corpus ecuatoriano, con sus palabras clave, y una prueba para ver cómo se reparte un texto nuevo entre ellos.
+- **Datos:** cifras de los corpus, tabla de modelos (accuracy, precision, recall y F1) y los gráficos del análisis.
+
+Para mostrar el logo de la universidad, guarda la imagen como `dashboard/assets/usfq_logo.png` (o `.svg`). Si no existe, el dashboard usa una marca de respaldo. El tema visual se define en `.streamlit/config.toml`.
 
 ---
 
@@ -187,7 +198,7 @@ El dashboard incluye cuatro secciones: clasificador de noticias con detección a
 - [x] Evaluación BERT sin fine-tuning en español
 - [x] Fine-tuning BERT multilingüe corpus ecuatoriano (+18 puntos de mejora)
 - [x] Análisis lingüístico LDA completado (8 tópicos corpus ecuatoriano)
-- [x] Dashboard Streamlit v1 (clasificador, XAI, tópicos LDA, estadísticas)
+- [x] Dashboard Streamlit v1 (verificar, explicar, temas LDA, datos)
 - [ ] Dashboard deployed
 - [ ] Tesis entregada
 
