@@ -31,3 +31,10 @@ shap
 lime
 requests
 beautifulsoup4
+
+# ================================
+# MES 5 — Dashboard Streamlit
+# ================================
+streamlit
+langdetect
+joblib

@@ -1,6 +1,6 @@
 # Sistema de Detección y Análisis de Noticias Falsas mediante NLP y Deep Learning
 
-**Proyecto de Titulación — Maestría en Ciencia de Datos**  
+**Proyecto de Titulación - Maestría en Ciencia de Datos**  
 Universidad San Francisco de Quito (USFQ)  
 Quito, Ecuador · 2026
 
@@ -55,9 +55,10 @@ fake-news-detection-ecuador/
 │   ├── 03_modelos_baseline.ipynb           # SVM | LR | NB | RF
 │   ├── 04_bert_finetuning.ipynb            # BERT base GPU T4 - inglés
 │   ├── 05_evaluacion_generalizacion.ipynb  # Generalización - fuera del dominio
-│   ├── 06_xai_shap_lime.ipynb             # SHAP y LIME - explicabilidad
-│   ├── 07_corpus_ecuatoriano.ipynb        # Corpus Ecuador Chequea 1,500+ verificaciones
-│   └── 08_bert_finetuning_ecuador.ipynb   # BERT multilingüe corpus Ecuador
+│   ├── 06_xai_shap_lime.ipynb              # SHAP y LIME - explicabilidad
+│   ├── 07_corpus_ecuatoriano.ipynb         # Corpus Ecuador Chequea 1,500+ verificaciones
+│   ├── 08_bert_finetuning_ecuador.ipynb    # BERT multilingüe corpus Ecuador
+│   └── 09_analisis_linguistico_ecuador.ipynb  # LDA - 8 tópicos corpus Ecuador
 │
 ├── references/
 │   └── references.bib                      # Referencias bibliográficas APA
@@ -77,7 +78,9 @@ fake-news-detection-ecuador/
 │   ├── 12_shap_direccion.png
 │   ├── 13_corpus_ecuatoriano.png
 │   ├── 14_bert_corpus_ecuatoriano.png
-│   └── 15_bert_ecuador_resultados.png
+│   ├── 15_bert_ecuador_resultados.png
+│   ├── 16_lda_topicos_ecuador.png
+│   └── 17_lda_distribucion_topicos.png
 │
 ├── src/
 │   ├── preprocessing.py              # Pipeline de preprocesamiento NLP
@@ -87,11 +90,14 @@ fake-news-detection-ecuador/
 ├── models/                           # Modelos entrenados (local, no en GitHub)
 │   ├── baseline_svm_best.pkl         # SVM - mejor baseline
 │   ├── tfidf_*.pkl                   # Vectorizadores TF-IDF
+│   ├── lda_model.pkl                 # LDA - 8 tópicos
+│   ├── lda_vectorizer.pkl            # CountVectorizer del LDA
 │   ├── bert_finetuned/               # BERT fine-tuned inglés
 │   └── bert_ecuador/                 # BERT fine-tuned español Ecuador
 │
 ├── thesis/                           # Documento de tesis (local, no en GitHub)
-├── dashboard/                        # Aplicación Streamlit (pendiente)
+├── dashboard/                        # Aplicación Streamlit (v1 funcional en local)
+│   └── app.py
 ├── .gitignore
 ├── README.md
 └── requirements.txt
@@ -108,7 +114,7 @@ fake-news-detection-ecuador/
 | Random Forest | Título+Texto | 99.21% | 0.9921 |
 | SVM | Título+Texto | 99.45% | 0.9945 |
 | **BERT base (inglés)** | **Título+Texto** | **99.91%** | **0.9991** |
-| SVM (generalización externa) | AG News + LLM | 49.00% | — |
+| SVM (generalización externa) | AG News + LLM | 49.00% | - |
 | BERT sin fine-tuning (Ecuador) | Contenido español | 66.62% | 0.7041 |
 | **BERT multilingüe (Ecuador)** | **Contenido español** | **84.91%** | **0.8305** |
 
@@ -149,6 +155,22 @@ python -m spacy download en_core_web_sm
 
 ---
 
+## Cómo correr el dashboard
+
+Requiere los modelos entrenados en `models/` (no incluidos en GitHub por su tamaño):
+`baseline_svm_best.pkl`, `tfidf_title_text_clean.pkl`, `lda_model.pkl`, `lda_vectorizer.pkl`,
+`bert_finetuned/` y `bert_ecuador/`.
+
+Desde la raíz del repositorio, con el entorno virtual activado:
+
+```bash
+python -m streamlit run dashboard/app.py
+```
+
+El dashboard incluye cuatro secciones: clasificador de noticias con detección automática de idioma (BERT inglés o BERT multilingüe Ecuador), explicabilidad con SHAP y LIME, clasificación de tópicos LDA y estadísticas de los corpus.
+
+---
+
 ## Estado del proyecto
 
 - [x] Propuesta aprobada
@@ -165,6 +187,7 @@ python -m spacy download en_core_web_sm
 - [x] Evaluación BERT sin fine-tuning en español
 - [x] Fine-tuning BERT multilingüe corpus ecuatoriano (+18 puntos de mejora)
 - [x] Análisis lingüístico LDA completado (8 tópicos corpus ecuatoriano)
+- [x] Dashboard Streamlit v1 (clasificador, XAI, tópicos LDA, estadísticas)
 - [ ] Dashboard deployed
 - [ ] Tesis entregada
 
