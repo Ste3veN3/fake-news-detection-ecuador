@@ -58,7 +58,8 @@ fake-news-detection-ecuador/
 │   ├── 06_xai_shap_lime.ipynb              # SHAP y LIME - explicabilidad
 │   ├── 07_corpus_ecuatoriano.ipynb         # Corpus Ecuador Chequea 1,500+ verificaciones
 │   ├── 08_bert_finetuning_ecuador.ipynb    # BERT multilingüe corpus Ecuador
-│   └── 09_analisis_linguistico_ecuador.ipynb  # LDA - 8 tópicos corpus Ecuador
+│   ├── 09_analisis_linguistico_ecuador.ipynb  # LDA - 8 tópicos corpus Ecuador
+│   └── 10_bert_pesos_por_clase_cv.ipynb    # BERT con pesos por clase, validación cruzada y líneas base
 │
 ├── references/
 │   └── references.bib                      # Referencias bibliográficas APA
@@ -93,7 +94,7 @@ fake-news-detection-ecuador/
 │   ├── lda_model.pkl                 # LDA - 8 tópicos
 │   ├── lda_vectorizer.pkl            # CountVectorizer del LDA
 │   ├── bert_finetuned/               # BERT fine-tuned inglés
-│   └── bert_ecuador/                 # BERT fine-tuned español Ecuador
+│   └── bert_ecuador/                 # BERT multilingüe con pesos por clase (español Ecuador)
 │
 ├── thesis/                           # Documento de tesis (local, no en GitHub)
 ├── dashboard/                        # Aplicación Streamlit (v1 funcional en local)
@@ -111,6 +112,8 @@ fake-news-detection-ecuador/
 
 ## Resultados obtenidos
 
+**Inglés (Fake & Real News y prueba externa)**
+
 | Modelo | Enfoque | Accuracy | F1-score |
 |---|---|---|---|
 | Naive Bayes | Título+Texto | 94.71% | 0.9471 |
@@ -119,8 +122,19 @@ fake-news-detection-ecuador/
 | SVM | Título+Texto | 99.45% | 0.9945 |
 | **BERT base (inglés)** | **Título+Texto** | **99.91%** | **0.9991** |
 | SVM (generalización externa) | AG News + LLM | 49.00% | - |
-| BERT sin fine-tuning (Ecuador) | Contenido español | 66.62% | 0.7041 |
-| **BERT multilingüe (Ecuador)** | **Contenido español** | **84.91%** | **0.8305** |
+
+**Español (corpus Ecuador Chequea, validación cruzada de 5 particiones)**
+
+Solo el 14% de los 1,543 artículos es Verificado, así que responder siempre Desinformación ya da 85.5% de accuracy. Por eso la métrica principal es F1 macro y el recall de la clase minoritaria.
+
+| Modelo | Accuracy | F1 macro | Recall de Verificado |
+|---|---|---|---|
+| Siempre la clase mayoritaria | 0.855 ± 0.001 | 0.461 ± 0.000 | 0.000 ± 0.000 |
+| TF-IDF + Regresión logística | 0.872 ± 0.010 | 0.720 ± 0.043 | 0.484 ± 0.131 |
+| TF-IDF + SVM | 0.881 ± 0.010 | 0.687 ± 0.045 | 0.332 ± 0.093 |
+| **BERT multilingüe con pesos por clase** | 0.843 ± 0.040 | **0.735 ± 0.043** | **0.695 ± 0.082** |
+
+Con pesos por clase, el BERT empata con la regresión logística en F1 macro y detecta más contenido verificado, a costa de más falsas alarmas. La primera versión del BERT, sin pesos y evaluada en una sola partición de 232 artículos, tuvo F1 macro 0.63 y recall de Verificado 0.26.
 
 ---
 
@@ -176,7 +190,7 @@ El dashboard tiene cuatro secciones, en la barra lateral:
 - **Verificar:** detecta el idioma del texto y lo clasifica con el BERT correspondiente (BERT base en inglés: Falsa o Real; BERT multilingüe Ecuador en español: Desinformación o Verificado). Muestra las dos probabilidades y marca como poco concluyentes los resultados por debajo de 65%. En español muestra además los tres temas LDA más cercanos al texto; en inglés ofrece llevar el texto a la sección Explicar.
 - **Explicar:** resalta las palabras que empujaron la decisión del SVM con TF-IDF mediante LIME (precisión Rápida de 1,500 variantes o Completa de 5,000, con semilla fija 42) y muestra la importancia global de SHAP. Incluye un par de ejemplos, con y sin la fuente, para mostrar el sesgo hacia "Reuters". Funciona con texto en inglés.
 - **Temas:** los ocho temas del modelo LDA sobre el corpus ecuatoriano, con sus palabras clave, y una prueba para ver cómo se reparte un texto nuevo entre ellos.
-- **Datos:** cifras de los corpus, tabla de modelos (accuracy, precision, recall y F1) y los gráficos del análisis.
+- **Datos:** cifras de los corpus, tablas de modelos en inglés y en español (con validación cruzada) y los gráficos del análisis.
 
 Para mostrar el logo de la universidad, guarda la imagen como `dashboard/assets/usfq_logo.png` (o `.svg`). Si no existe, el dashboard usa una marca de respaldo. El tema visual se define en `.streamlit/config.toml`.
 
@@ -195,8 +209,8 @@ Para mostrar el logo de la universidad, guarda la imagen como `dashboard/assets/
 - [x] Prueba de generalización externa (sesgo de dominio documentado)
 - [x] XAI implementado (SHAP + LIME)
 - [x] Corpus ecuatoriano construido (1,500+ verificaciones Ecuador Chequea)
-- [x] Evaluación BERT sin fine-tuning en español
-- [x] Fine-tuning BERT multilingüe corpus ecuatoriano (+18 puntos de mejora)
+- [x] Evaluación del BERT en inglés sobre el corpus ecuatoriano (transferencia sin adaptación)
+- [x] Fine-tuning BERT multilingüe con pesos por clase en el corpus ecuatoriano (F1 macro 0.735, validación cruzada de 5 particiones)
 - [x] Análisis lingüístico LDA completado (8 tópicos corpus ecuatoriano)
 - [x] Dashboard Streamlit v1 (verificar, explicar, temas LDA, datos)
 - [ ] Dashboard deployed

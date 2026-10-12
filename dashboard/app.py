@@ -319,7 +319,7 @@ def page_verificar():
     neg, pos = ETIQUETAS[res["idioma"]]
     nombre_idioma = "español" if res["idioma"] == "es" else "inglés"
     modelo = (
-        "BERT multilingüe con fine-tuning sobre el corpus de Ecuador Chequea"
+        "BERT multilingüe con fine-tuning y pesos por clase sobre el corpus de Ecuador Chequea"
         if res["idioma"] == "es" else "BERT base con fine-tuning sobre Fake & Real News"
     )
     with st.container(key="card_resultado"):
@@ -480,14 +480,14 @@ def page_datos():
             ("38,473", "noticias en Fake & Real News (Kaggle), tras la limpieza"),
             ("43.4%", "menos texto después del preprocesamiento"),
             ("1,543", "verificaciones de Ecuador Chequea, 2016-2026"),
-            ("+18.29", "puntos de accuracy con fine-tuning en español"),
+            ("0.735", "F1 macro del BERT en español con pesos por clase (5 particiones)"),
         ]))
 
     with st.container(key="card_modelos"):
         md(ui.card_title(
-            "Los modelos",
-            "Precision, recall y F1 ponderados por clase. "
-            "Resaltados: el mejor baseline y el modelo final en español.",
+            "Modelos en inglés",
+            "Entrenados y evaluados con Fake & Real News. Precision, recall y F1 ponderados por clase. "
+            "Resaltado: el mejor baseline.",
         ))
         md(ui.table(
             ["Modelo", "Accuracy", "Precision", "Recall", "F1"],
@@ -498,14 +498,33 @@ def page_datos():
                 ["SVM (mejor baseline)", "99.45%", "0.99", "0.99", "0.9945"],
                 ["BERT base, inglés", "99.91%", "n/d", "n/d", "0.9991"],
                 ["SVM, prueba externa (AG News)", "49.00%", "0.49", "0.49", "0.46"],
-                ["BERT sin fine-tuning, corpus Ecuador", "66.62%", "0.76", "0.67", "0.7041"],
-                ["BERT multilingüe con fine-tuning, corpus Ecuador", "84.91%", "0.82", "0.85", "0.8305"],
             ],
-            key_rows=(3, 7),
-            nota="n/d: no se calculó en el notebook original. Los modelos en inglés se evaluaron sobre su "
-                 "conjunto de prueba y la prueba externa del SVM usó 100 noticias. El BERT sin fine-tuning "
-                 "se evaluó sobre todo el corpus ecuatoriano y el modelo con fine-tuning sobre su 15% de "
-                 "prueba, así que la diferencia entre ambos es indicativa.",
+            key_rows=(3,),
+            nota="n/d: no se calculó en el notebook original. La prueba externa del SVM usó 100 noticias "
+                 "y muestra que el modelo no generaliza fuera de su dominio.",
+        ))
+
+    with st.container(key="card_modelos_es"):
+        md(ui.card_title(
+            "Modelos en español",
+            "Corpus de Ecuador Chequea: 1,543 artículos, de los cuales solo el 14% son Verificado. "
+            "Validación cruzada de 5 particiones; se muestra la media y, cuando se calculó, la "
+            "desviación entre particiones.",
+        ))
+        md(ui.table(
+            ["Modelo", "Accuracy", "F1 macro", "Recall de Verificado"],
+            [
+                ["Siempre la clase mayoritaria", "0.855 ± 0.001", "0.461 ± 0.000", "0.000 ± 0.000"],
+                ["TF-IDF + Regresión logística", "0.872 ± 0.010", "0.720 ± 0.043", "0.484 ± 0.131"],
+                ["TF-IDF + SVM", "0.881 ± 0.010", "0.687 ± 0.045", "0.332 ± 0.093"],
+                ["BERT multilingüe con pesos por clase", "0.843 ± 0.040", "0.735 ± 0.043", "0.695 ± 0.082"],
+            ],
+            key_rows=(3,),
+            nota="El accuracy no es la métrica principal: responder siempre Desinformación ya acierta el "
+                 "85.5%. Por eso se usan F1 macro y el recall de la clase minoritaria. Con pesos por clase "
+                 "el BERT detecta más contenido verificado, a costa de más falsas alarmas. La primera "
+                 "versión del BERT, sin pesos y evaluada en una sola partición de 232 artículos, tuvo "
+                 "F1 macro 0.63 y recall de Verificado 0.26.",
         ))
 
     with st.expander("Ver los gráficos del análisis exploratorio"):
