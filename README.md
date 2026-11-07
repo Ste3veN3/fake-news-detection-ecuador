@@ -1,4 +1,4 @@
-# Sistema de Detección y Análisis de Noticias Falsas mediante NLP y Deep Learning
+# Sistema de Detección y Análisis de Noticias Falsas
 
 **Proyecto de Titulación - Maestría en Ciencia de Datos**  
 Universidad San Francisco de Quito (USFQ)  
@@ -59,12 +59,14 @@ fake-news-detection-ecuador/
 │   ├── 07_corpus_ecuatoriano.ipynb         # Corpus Ecuador Chequea 1,500+ verificaciones
 │   ├── 08_bert_finetuning_ecuador.ipynb    # BERT multilingüe corpus Ecuador
 │   ├── 09_analisis_linguistico_ecuador.ipynb  # LDA - 8 tópicos corpus Ecuador
-│   └── 10_bert_pesos_por_clase_cv.ipynb    # BERT con pesos por clase, validación cruzada y líneas base
+│   ├── 10_bert_pesos_por_clase_cv.ipynb    # BERT con pesos por clase, validación cruzada y líneas base
+│   └── 11_figuras_articulo.ipynb           # Figuras del artículo en PDF vectorial y conteo de plataformas
 │
 ├── references/
 │   └── references.bib                      # Referencias bibliográficas APA
 │
-├── reports/                                # Visualizaciones del EDA y modelos
+├── reports/                                # Visualizaciones del EDA y modelos (PNG)
+│   ├── pdf/                                # Figuras del artículo en PDF vectorial (cuaderno 11)
 │   ├── 01_distribucion_basica.png
 │   ├── 02_wordcloud.png
 │   ├── 03_sentimiento.png
@@ -125,7 +127,7 @@ fake-news-detection-ecuador/
 
 **Español (corpus Ecuador Chequea, validación cruzada de 5 particiones)**
 
-Solo el 14% de los 1,543 artículos es Verificado, así que responder siempre Desinformación ya da 85.5% de accuracy. Por eso la métrica principal es F1 macro y el recall de la clase minoritaria.
+Solo el 14.5% de los 1,543 artículos es Verificado, así que responder siempre Desinformación ya da 85.5% de accuracy. Por eso la métrica principal es F1 macro y el recall de la clase minoritaria.
 
 | Modelo | Accuracy | F1 macro | Recall de Verificado |
 |---|---|---|---|
@@ -138,13 +140,23 @@ Con pesos por clase, el BERT empata con la regresión logística en F1 macro y d
 
 ---
 
+## Limitaciones conocidas
+
+- **Dominio:** Fake & Real News es política de EE. UU. de 2016 y 2017. Fuera de ese dominio, el SVM baja de 99.45% a 49.00% de accuracy.
+- **Fuente y estilo:** en el análisis con SHAP, la palabra "reuters" pesa unas tres veces más que cualquier otra (0.2282 contra 0.0779). El modelo aprendió la fuente y el estilo de redacción, no la veracidad.
+- **Español:** el corpus es pequeño y desbalanceado (14.5% Verificado), y los modelos se entrenaron con el texto de las verificaciones, no con afirmaciones sueltas.
+- **Plataformas:** las verificaciones mencionan Facebook (58.2%), Twitter/X (39.3%) y TikTok (26.2%), pero eso mide menciones en el texto, no el canal por el que circuló el contenido.
+- **Correcciones:** los cuadernos 06, 07, 08 y 09 tienen notas de corrección donde un resultado o una frase inicial quedó superado. Las figuras vigentes del artículo están en el cuaderno 11.
+
+---
+
 ## Datasets utilizados
 
 | Capa | Dataset | Tamaño | Fuente | Estado |
 |---|---|---|---|---|
-| Entrenamiento | Fake & Real News | ~45,000 artículos | Kaggle | ✅ Implementado |
-| Generalización | AG News | 7,600 artículos | HuggingFace (Reuters/AP) | ✅ Implementado |
-| Ecuador 🇪🇨 | Corpus Ecuador Chequea | 1,500+ verificaciones | Web scraping | ✅ Implementado |
+| Entrenamiento | Fake & Real News | 44,898 artículos (38,473 tras la limpieza) | Kaggle | ✅ Implementado |
+| Generalización | AG News + noticias generadas con un LLM | 50 reales (de 7,600 de la partición de prueba) y 50 generadas | HuggingFace (Reuters/AP) | ✅ Implementado |
+| Ecuador 🇪🇨 | Corpus Ecuador Chequea | 1,543 verificaciones | Web scraping (API REST) | ✅ Implementado |
 
 ---
 
@@ -213,6 +225,8 @@ Para mostrar el logo de la universidad, guarda la imagen como `dashboard/assets/
 - [x] Fine-tuning BERT multilingüe con pesos por clase en el corpus ecuatoriano (F1 macro 0.735, validación cruzada de 5 particiones)
 - [x] Análisis lingüístico LDA completado (8 tópicos corpus ecuatoriano)
 - [x] Dashboard Streamlit v1 (verificar, explicar, temas LDA, datos)
+- [x] Figuras del artículo en PDF vectorial (notebook 11) y notas de corrección en los cuadernos 06 a 09
+- [ ] Artículo en Overleaf (formato USFQ, en redacción)
 - [ ] Dashboard deployed
 - [ ] Tesis entregada
 

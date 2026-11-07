@@ -529,7 +529,7 @@ def page_datos():
 
     with st.expander("Ver los gráficos del análisis exploratorio"):
         for nombre in ["01_distribucion_basica.png", "02_wordcloud.png", "04_eda_completo.png",
-                       "13_corpus_ecuatoriano.png", "15_bert_ecuador_resultados.png"]:
+                       "13_corpus_ecuatoriano.png"]:
             ruta = REPORTS_DIR / nombre
             if ruta.exists():
                 st.image(str(ruta))
