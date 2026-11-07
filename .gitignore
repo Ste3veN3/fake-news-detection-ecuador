@@ -33,6 +33,7 @@ models/
 # PDFs DE REFERENCIAS
 # ================================
 *.pdf
+!reports/pdf/*.pdf
 
 # ================================
 # SISTEMA OPERATIVO

@@ -22,7 +22,7 @@ Quito, Ecuador · 2026
 
 Este proyecto desarrolla un sistema integral para la detección automática de noticias falsas aplicando técnicas de Procesamiento de Lenguaje Natural (NLP), aprendizaje automático y Explainable AI (XAI). El sistema clasifica contenido como verdadero o falso, analiza los patrones lingüísticos que caracterizan la desinformación, y explica las decisiones de clasificación mediante métodos interpretables (SHAP, LIME).
 
-El sistema es evaluado sobre el dataset Fake & Real News (Kaggle) y validado mediante una prueba de generalización con AG News (Reuters/AP). Como contribución original, se construye el primer corpus ecuatoriano de desinformación etiquetada con más de 1,500 verificaciones de Ecuador Chequea, organización certificada por la International Fact-Checking Network (IFCN), cubriendo el período 2016-2026.
+El sistema es evaluado sobre el dataset Fake & Real News (Kaggle) y validado mediante una prueba de generalización con noticias de AG News y noticias generadas con un modelo de lenguaje. Como contribución original, se construye un corpus ecuatoriano de 1,543 verificaciones etiquetadas de Ecuador Chequea, organización signataria verificada de la International Fact-Checking Network (IFCN), que cubre de 2016 a 2026.
 
 ---
 
@@ -60,10 +60,11 @@ fake-news-detection-ecuador/
 │   ├── 08_bert_finetuning_ecuador.ipynb    # BERT multilingüe corpus Ecuador
 │   ├── 09_analisis_linguistico_ecuador.ipynb  # LDA - 8 tópicos corpus Ecuador
 │   ├── 10_bert_pesos_por_clase_cv.ipynb    # BERT con pesos por clase, validación cruzada y líneas base
-│   └── 11_figuras_articulo.ipynb           # Figuras del artículo en PDF vectorial y conteo de plataformas
+│   ├── 11_figuras_articulo.ipynb           # Figuras del artículo en PDF vectorial y conteo de plataformas
+│   └── 12_bert_sin_veredicto_cv.ipynb      # BERT sin palabras de veredicto, mismas particiones del cuaderno 10
 │
 ├── references/
-│   └── references.bib                      # Referencias bibliográficas APA
+│   └── references.bib                      # Referencias bibliográficas (BibTeX)
 │
 ├── reports/                                # Visualizaciones del EDA y modelos (PNG)
 │   ├── pdf/                                # Figuras del artículo en PDF vectorial (cuaderno 11)
@@ -138,6 +139,19 @@ Solo el 14.5% de los 1,543 artículos es Verificado, así que responder siempre 
 
 Con pesos por clase, el BERT empata con la regresión logística en F1 macro y detecta más contenido verificado, a costa de más falsas alarmas. La primera versión del BERT, sin pesos y evaluada en una sola partición de 232 artículos, tuvo F1 macro 0.63 y recall de Verificado 0.26.
 
+**Dependencia del vocabulario de veredicto (corpus Ecuador Chequea)**
+
+Las etiquetas se asignaron con reglas de palabras clave aplicadas al propio texto (cuaderno 07). Se repitió la validación cruzada quitando esas palabras (cuadernos 11 y 12):
+
+| Modelo | Entrada | F1 macro | Recall de Verificado |
+|---|---|---|---|
+| Regresión logística | Texto completo | 0.718 | 0.480 |
+| Regresión logística | Sin veredicto | 0.651 | 0.390 |
+| BERT multilingüe | Texto completo | 0.735 | 0.695 |
+| BERT multilingüe | Sin veredicto | 0.715 | 0.659 |
+
+En el BERT la caída de F1 macro (0.020) no se distingue del ruido entre particiones (prueba t pareada, p = 0.52); la regresión logística baja más. Es una sola corrida, y quitar esas palabras no elimina otras pistas del estilo de las verificaciones. La regresión logística aparece con 0.718 en esta ejecución local y con 0.720 en el cuaderno 10 (Colab).
+
 ---
 
 ## Limitaciones conocidas
@@ -145,6 +159,7 @@ Con pesos por clase, el BERT empata con la regresión logística en F1 macro y d
 - **Dominio:** Fake & Real News es política de EE. UU. de 2016 y 2017. Fuera de ese dominio, el SVM baja de 99.45% a 49.00% de accuracy.
 - **Fuente y estilo:** en el análisis con SHAP, la palabra "reuters" pesa unas tres veces más que cualquier otra (0.2282 contra 0.0779). El modelo aprendió la fuente y el estilo de redacción, no la veracidad.
 - **Español:** el corpus es pequeño y desbalanceado (14.5% Verificado), y los modelos se entrenaron con el texto de las verificaciones, no con afirmaciones sueltas.
+- **Etiquetas:** las del corpus ecuatoriano se asignaron con reglas de palabras clave y no se midió cuántas son incorrectas. Además, se descartó el 59% de los artículos descargados (2,256 de 3,799) por no tener una etiqueta clara.
 - **Plataformas:** las verificaciones mencionan Facebook (58.2%), Twitter/X (39.3%) y TikTok (26.2%), pero eso mide menciones en el texto, no el canal por el que circuló el contenido.
 - **Correcciones:** los cuadernos 06, 07, 08 y 09 tienen notas de corrección donde un resultado o una frase inicial quedó superado. Las figuras vigentes del artículo están en el cuaderno 11.
 
@@ -155,7 +170,7 @@ Con pesos por clase, el BERT empata con la regresión logística en F1 macro y d
 | Capa | Dataset | Tamaño | Fuente | Estado |
 |---|---|---|---|---|
 | Entrenamiento | Fake & Real News | 44,898 artículos (38,473 tras la limpieza) | Kaggle | ✅ Implementado |
-| Generalización | AG News + noticias generadas con un LLM | 50 reales (de 7,600 de la partición de prueba) y 50 generadas | HuggingFace (Reuters/AP) | ✅ Implementado |
+| Generalización | AG News + noticias generadas con un LLM | 50 reales (de 7,600 de la partición de prueba) y 50 generadas | HuggingFace (noticias de múltiples fuentes) | ✅ Implementado |
 | Ecuador 🇪🇨 | Corpus Ecuador Chequea | 1,543 verificaciones | Web scraping (API REST) | ✅ Implementado |
 
 ---
@@ -215,7 +230,7 @@ Para mostrar el logo de la universidad, guarda la imagen como `dashboard/assets/
 - [x] Entorno configurado
 - [x] EDA completado
 - [x] Preprocesamiento NLP completado (3 enfoques)
-- [x] Marco Teórico redactado (7 papers, 14 referencias)
+- [x] Marco Teórico redactado (7 trabajos principales)
 - [x] Modelos baseline completados (mejor: SVM)
 - [x] BERT fine-tuning completado en inglés
 - [x] Prueba de generalización externa (sesgo de dominio documentado)
@@ -226,6 +241,7 @@ Para mostrar el logo de la universidad, guarda la imagen como `dashboard/assets/
 - [x] Análisis lingüístico LDA completado (8 tópicos corpus ecuatoriano)
 - [x] Dashboard Streamlit v1 (verificar, explicar, temas LDA, datos)
 - [x] Figuras del artículo en PDF vectorial (notebook 11) y notas de corrección en los cuadernos 06 a 09
+- [x] Chequeo de fuga de etiqueta con regresión logística y BERT (notebooks 11 y 12)
 - [ ] Artículo en Overleaf (formato USFQ, en redacción)
 - [ ] Dashboard deployed
 - [ ] Tesis entregada
